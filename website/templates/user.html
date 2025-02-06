@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Felhasználó</h2>
+    <h2>{{ user.first_name }}</h2>
+    <h4>{{ user.email }}</h4>
+    <h4>@{{ user.username }}</h4>
+    {% if local_user %}
+        <form method="post">
+            <textarea name="post"></textarea>
+            <button type="submit" name="postbtn">Jegyzés</button>
+        </form>
+        <form method="post">
+            <button type="submit" name="logout">Kijelentkezés</button>
+        </form>
+    {% endif %}
+    {% if posts %}
+        {% for post in posts %}
+        <div style="background-color: darkblue; padding-bottom: 8px; padding-top: 8px; box-sizing: content-box;">
+            <p style="color: white;">{{ post.data }}</p>
+            <p style="color: white;">{{ post.date }}</p>
+            {% if local_user %}
+                <form method="post">
+                    <textarea name="id" style="visibility: hidden;">{{ post.id }}</textarea>
+                    <button type="submit" name="delete">Törlés</button>
+                </form>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Nincsenek posztok</p>
+    {% endif %}
+{% endblock %}

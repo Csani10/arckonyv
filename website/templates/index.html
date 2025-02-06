@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+{% if user.is_authenticated %}
+<h2>Főoldal <a href="/user">@{{ user.username }}</a></h2>
+{% else %}
+<h2>Főoldal</h2>
+{% endif %}
+{% if not user.is_authenticated %}
+<div class="formdiv">
+    <a href="login"><button name="login">Bejelentkezés</button></a><br>
+    <a href="register"><button name="register">Regisztráció</button></a>
+</div>
+{% else %}
+{% if posts %}
+        {% for post in posts %}
+        <div style="background-color: darkblue; padding-bottom: 8px; padding-top: 8px; box-sizing: content-box;">
+            {% for user in users %}
+                {% if user.id == post.user_id %}
+                <h3><a href="/user?id={{ user.id }}">@{{ user.username }}</a></h3>
+                {% endif %}
+            {% endfor %}
+            <p style="color: white;">{{ post.data }}</p>
+            <p style="color: white;">{{ post.date }}</p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Nincsenek posztok</p>
+    {% endif %}
+{% endif %}
+<style>
+    h2 {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .formdiv {
+        background-color: darkblue;
+        width: fit-content;
+        justify-self: right;
+        align-content: center;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    li {
+        list-style-type: none;
+    }
+    button {
+        font-size: 20px;
+        margin: 10px;
+        position: relative;
+    }
+    input {
+        font-size: 20px;
+        margin: 10px;
+    }
+</style>
+{% endblock %}
