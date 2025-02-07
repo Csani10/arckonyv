@@ -8,7 +8,7 @@
 <body>
     <a href="/admin"><h2>Admin Home</h2></a>
     {% if table == "user" %}
-    <form action="/admin" method="post">
+    <form method="post">
         <label for="email">Email:</label>
         <input type="text" name="email" id="email">
         <label for="first_name">First name:</label>
@@ -24,7 +24,7 @@
         <button type="submit">Add row</button>
     </form>
     {% elif table == "post" %}
-    <form action="/admin" method="post">
+    <form method="post">
         <label for="data">Data:</label>
         <textarea name="data" id="data"></textarea>
         <label for="user_id">User id:</label>
@@ -32,7 +32,7 @@
         <button type="submit">Add row</button>
     </form>
     {% elif table == "relatives" %}
-    <form action="/admin" method="post">
+    <form method="post">
         <label for="relatives">Relatives:</label>
         <textarea name="relatives" id="relatives"></textarea>
         <label for="user_id">User id:</label>
@@ -40,7 +40,7 @@
         <button type="submit">Add row</button>
     </form>
     {% elif table == "relative_add" %}
-    <form action="/admin" method="post">
+    <form method="post">
         <label for="user1_id">User1 id:</label>
         <input type="text" name="user1_id" id="user1_id">
         <label for="user2_id">User2 id:</label>

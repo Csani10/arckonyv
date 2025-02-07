@@ -9,6 +9,7 @@
     <a href="/admin"><h2>Admin Home</h2></a>
     {% if rows and table %}
         <h3>{{ table }}</h3>
+        <h4><a href="/admin/addrow?table={{ table }}">Add Row</a></h4>
         {% if table == "user" %}
         <ul>
             {% for row in rows %}

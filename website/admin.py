@@ -8,7 +8,6 @@ import json
 admin = Blueprint("admin", __name__)
 
 @admin.route("/addrow", methods=["GET", "POST"])
-@login_required
 def addrow():
     if not current_user.admin or not current_user.is_authenticated:
         return redirect(url_for("views.index"))
@@ -26,7 +25,6 @@ def addrow():
         user1_id = request.form.get("user1_id")
         user2_id = request.form.get("user2_id")
         data = request.form.get("data")
-        date = request.form.get("date")
         relatives = request.form.get("relatives")
 
         match table:
@@ -50,7 +48,6 @@ def addrow():
     return render_template("admin/addrow.html", table=table)
 
 @admin.route("/", methods=["GET", "POST"])
-@login_required
 def index():
     if not current_user.admin or not current_user.is_authenticated:
         return redirect(url_for("views.index"))
