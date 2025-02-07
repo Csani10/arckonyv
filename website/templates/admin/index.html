@@ -19,6 +19,7 @@
                 <input type="hidden" name="table" value="{{ table }}">
                 <input type="hidden" name="id" value="{{ row.id }}">
             </form>
+            <a href="/admin/editrow?table={{ table }}&id={{ row.id }}"><button>editrow: id={{ row.id }}</button></a>
             {% endfor %}
         </ul>
         {% elif table == "post" %}
@@ -30,6 +31,7 @@
                 <input type="hidden" name="table" value="{{ table }}">
                 <input type="hidden" name="id" value="{{ row.id }}">
             </form>
+            <a href="/admin/editrow?table={{ table }}&id={{ row.id }}"><button>editrow: id={{ row.id }}</button></a>
             {% endfor %}
         </ul>
         {% elif table == "relatives" %}
@@ -41,6 +43,7 @@
                 <input type="hidden" name="table" value="{{ table }}">
                 <input type="hidden" name="id" value="{{ row.id }}">
             </form>
+            <a href="/admin/editrow?table={{ table }}&id={{ row.id }}"><button>editrow: id={{ row.id }}</button></a>
             {% endfor %}
         </ul>
         {% elif table == "relative_add" %}
@@ -52,6 +55,7 @@
                 <input type="hidden" name="table" value="{{ table }}">
                 <input type="hidden" name="id" value="{{ row.id }}">
             </form>
+            <a href="/admin/editrow?table={{ table }}&id={{ row.id }}"><button>editrow: id={{ row.id }}</button></a>
             {% endfor %}
         </ul>
         {% endif %}

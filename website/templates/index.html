@@ -18,7 +18,10 @@
                 {% if user.id == post.user_id %}
                 <h3 style="margin: 5px;"><a href="/user?id={{ user.id }}">@{{ user.username }}</a></h3>
                 {% endif %}
-            <p style="color: white; margin: 5px;">{{ post.data }}</p>
+            
+            {% for line in post.data.splitlines() %}
+            <p style="color: white; margin: 5px;">{{ line }}</p>
+            {% endfor %}
             <p style="color: white; margin: 5px;">{{ post.date }}</p>
         </div>
         {% endfor %}

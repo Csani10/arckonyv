@@ -68,7 +68,9 @@
     {% if posts %}
         {% for post in posts %}
         <div style="background-color: darkblue; padding-bottom: 8px; padding-top: 8px; box-sizing: content-box; border-radius: 10px; margin-top: 5px; margin-bottom:5px;">
-            <p style="color: white; margin: 5px;">{{ post.data }}</p>
+            {% for line in post.data.splitlines() %}
+            <p style="color: white; margin: 5px;">{{ line }}</p>
+            {% endfor %}
             <p style="color: white; margin: 5px;">{{ post.date }}</p>
             {% if local_user %}
                 <form method="post">

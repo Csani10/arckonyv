@@ -10,6 +10,9 @@ def index():
     posts = Post.query.order_by(Post.date).all()
     posts.reverse()
 
+    for post in posts:
+        print(post.data)
+
     return render_template("index.html", user=current_user, posts=posts, users=User)
 
 @views.route("/user", methods=["GET", "POST"])

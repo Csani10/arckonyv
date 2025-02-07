@@ -7,12 +7,109 @@ import json
 
 admin = Blueprint("admin", __name__)
 
+def edituser(form):
+    id = form.get("id")
+    email = request.form.get("email")
+    first_name = request.form.get("first_name")
+    last_name = request.form.get("last_name")
+    username = request.form.get("username")
+    password = request.form.get("password")
+    admin = request.form.get("admin")
+
+    user = User.query.get(int(id))
+
+    if email:
+        user.email = email
+    if first_name:
+        user.first_name = first_name
+    if last_name:
+        user.last_name = last_name
+    if username:
+        user.username = username
+    if password:
+        user.password = generate_password_hash(password)
+    if admin:
+        user.admin = admin
+    
+    db.session.commit()
+
+def editpost(form):
+    id = form.get("id")
+    data = request.form.get("data")
+
+    print(data)
+
+    post = Post.query.get(int(id))
+
+    if data:
+        post.data = data
+
+    db.session.commit()
+
+def editrelatives(form):
+    id = form.get("id")
+    relatives = request.form.get("relatives")
+    user_id = request.form.get("user_id")
+
+    relatives_object = Relatives.query.get(int(id))
+
+    if relatives:
+        relatives_object.relatives = relatives
+    if user_id:
+        relatives_object.user_id = int(user_id)
+
+    db.session.commit()
+
+def editrelative_add(form):
+    id = form.get("id")
+    user1_id = request.form.get("user1_id")
+    user2_id = request.form.get("user2_id")
+
+    relative_add = RelativeAdd.query.get(int(id))
+
+    if user1_id:
+        relative_add.user1_id = int(user1_id)
+    if user2_id:
+        relative_add.user2_id = int(user2_id)
+    
+    db.session.commit()
+
+@admin.route("/editrow", methods=["GET", "POST"])
+def editrow():
+    if not current_user.admin or not current_user.is_authenticated:
+        return redirect(url_for("views.index"))
+
+    table = request.args.get("table")
+    id = request.args.get("id")
+
+    if not table:
+        return redirect(url_for("admin.index"))
+
+    if not id:
+        return request(url_for("admin.index"))    
+
+    if request.method == "POST":
+        match table:
+            case "user":
+                edituser(request.form)
+            case "post":
+                editpost(request.form)
+            case "relatives":
+                editrelatives(request.form)
+            case "relative_add":
+                editrelative_add(request.form)
+
+    return render_template("/admin/editrow.html", table=table, id=int(id))
+
 @admin.route("/addrow", methods=["GET", "POST"])
 def addrow():
     if not current_user.admin or not current_user.is_authenticated:
         return redirect(url_for("views.index"))
     
     table = request.args.get("table")
+
+    if not table:
+        return redirect(url_for("admin.index"))
 
     if request.method == "POST":
         email = request.form.get("email")
@@ -33,15 +130,15 @@ def addrow():
                 db.session.add(newrow)
                 db.session.commit()
             case "post":
-                newrow = Post(data=data, user_id=user_id)
+                newrow = Post(data=data, user_id=int(user_id))
                 db.session.add(newrow)
                 db.session.commit()
             case "relatives":
-                newrow = Relatives(relatives=relatives, user_id=user_id)
+                newrow = Relatives(relatives=relatives, user_id=int(user_id))
                 db.session.add(newrow)
                 db.session.commit()
             case "relative_add":
-                newrow = RelativeAdd(user1_id=user1_id, user2_id=user2_id)
+                newrow = RelativeAdd(user1_id=int(user1_id), user2_id=int(user2_id))
                 db.session.add(newrow)
                 db.session.commit()
 
