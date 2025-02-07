@@ -5,23 +5,75 @@
     <h4>{{ user.email }}</h4>
     <h4>@{{ user.username }}</h4>
     {% if local_user %}
+        <h3>Ismerősök</h3>
+        <ul>
+            {% set relatives_json = json.loads(relatives.query.filter_by(user_id=user.id).first().relatives) %}
+            {% for relative in relatives_json["relatives"] %}
+            <li>{{ relative }}</li>
+            {% endfor %}
+        </ul>
+        <h3>Ismerősnek kérések</h3>
+        <ul>
+            {% set relative_adds = relative_add.query.filter_by(user2_id=user.id).all() %}
+            {% for relative in relative_adds %}
+            <form method="post">
+            {% set user1 = user.query.filter_by(id=relative.user1_id).first() %}
+            {% set user2 = user.query.filter_by(id=relative.user2_id).first() %}
+            <li>{{ user1.username }} <button type="submit" name="acceptasrelative">Elfogadás ismerősnek</button></li>
+            <input type="hidden" name="id" value="{{ user1.id }}">
+            </form>
+            {% endfor %}
+        </ul>
+        <h3>Jegyzés</h3>
         <form method="post">
-            <textarea name="post"></textarea>
+            <textarea name="post"></textarea><br>
             <button type="submit" name="postbtn">Jegyzés</button>
         </form>
+        <br>
         <form method="post">
             <button type="submit" name="logout">Kijelentkezés</button>
         </form>
+
+    {% endif %}
+    {% if not local_user and current_user.is_authenticated %}
+        {% set relative_adding = relative_add.query.filter_by(user1_id=current_user.id, user2_id=user.id).first() %}
+        {% set relative_adding2 = relative_add.query.filter_by(user1_id=user.id, user2_id=current_user.id).first() %}
+        {% set relatives_user = relatives.query.filter_by(user_id=current_user.id).first() %}
+        {#{{ relatives_user.relatives }}#}
+        {% set relatives_json = json.loads(relatives_user.relatives) %}    
+
+        
+        {% if not relative_adding and not user.username in relatives_json["relatives"] and not relative_adding2 %}
+        <form method="post" action="user?id={{ user.id }}">
+            <input type="hidden" name="id" value="{{ user.id }}">
+            <button type="submit" name="addasrelative">Ismerősnek felvétel</button>
+        </form>
+        {% elif relative_adding and not user.username in relatives_json["relatives"] and not relative_adding2 %}
+        <form method="post" action="user?id={{ user.id }}">
+            <input type="hidden" name="id" value="{{ user.id }}">
+            <button type="submit" name="" disabled>Ismerősnek felvéve</button>
+        </form>
+        {% elif not relative_adding and not user.username in relatives_json["relatives"] and relative_adding2 %}
+        <form method="post" action="user?id={{ user.id }}">
+            <input type="hidden" name="id" value="{{ user.id }}">
+            <button type="submit" name="acceptasrelative">Elfogadás ismerősnek</button>
+        </form>
+        {% elif not relative_adding and user.username in relatives_json["relatives"] and not relative_adding2 %}
+        <form method="post" action="user?id={{ user.id }}">
+            <input type="hidden" name="id" value="{{ user.id }}">
+            <button type="submit" name="" disabled>Ismerős</button>
+        </form>
+        {% endif %}
     {% endif %}
     {% if posts %}
         {% for post in posts %}
-        <div style="background-color: darkblue; padding-bottom: 8px; padding-top: 8px; box-sizing: content-box;">
-            <p style="color: white;">{{ post.data }}</p>
-            <p style="color: white;">{{ post.date }}</p>
+        <div style="background-color: darkblue; padding-bottom: 8px; padding-top: 8px; box-sizing: content-box; border-radius: 10px; margin-top: 5px; margin-bottom:5px;">
+            <p style="color: white; margin: 5px;">{{ post.data }}</p>
+            <p style="color: white; margin: 5px;">{{ post.date }}</p>
             {% if local_user %}
                 <form method="post">
-                    <textarea name="id" style="visibility: hidden;">{{ post.id }}</textarea>
-                    <button type="submit" name="delete">Törlés</button>
+                    <input type="hidden" name="id" value="{{ post.id }}"><br>
+                    <button type="submit" name="delete" style="margin: 5px;">Törlés</button>
                 </form>
             {% endif %}
         </div>

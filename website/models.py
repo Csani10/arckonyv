@@ -9,7 +9,7 @@ class RelativeAdd(db.Model):
 
 class Relatives(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    relatives = db.Column(db.JSON)
+    relatives = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
 class Post(db.Model):
@@ -25,4 +25,5 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String(150))
     username = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
+    admin = db.Column(db.Boolean, default=False)
     relatives = db.relationship("Relatives")

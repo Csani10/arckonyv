@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arckönyv: Admin</title>
+</head>
+<body>
+    <a href="/admin"><h2>Admin Home</h2></a>
+    {% if rows and table %}
+        <h3>{{ table }}</h3>
+        {% if table == "user" %}
+        <ul>
+            {% for row in rows %}
+            <form method="post" action="/admin?table={{ table }}">
+                <li>{{ row.id }}|{{ row.email }}|{{ row.first_name }}|{{ row.last_name }}|{{ row.username }}|{{ row.password }}|{{ row.admin }}|{{ row.relatives }}</li>
+                <button type="submit" name="deleterow">deleterow: id={{ row.id }}</button>
+                <input type="hidden" name="table" value="{{ table }}">
+                <input type="hidden" name="id" value="{{ row.id }}">
+            </form>
+            {% endfor %}
+        </ul>
+        {% elif table == "post" %}
+        <ul>
+            {% for row in rows %}
+            <form method="post" action="/admin?table={{ table }}">
+                <li>{{ row.id }}|{{ row.data }}|{{ row.date }}|{{ row.user_id }}</li>
+                <button type="submit" name="deleterow">deleterow: id={{ row.id }}</button>
+                <input type="hidden" name="table" value="{{ table }}">
+                <input type="hidden" name="id" value="{{ row.id }}">
+            </form>
+            {% endfor %}
+        </ul>
+        {% elif table == "relatives" %}
+        <ul>
+            {% for row in rows %}
+            <form method="post" action="/admin?table={{ table }}">
+                <li>{{ row.id }}|{{ row.relatives }}|{{ row.user_id }}</li>
+                <button type="submit" name="deleterow">deleterow: id={{ row.id }}</button>
+                <input type="hidden" name="table" value="{{ table }}">
+                <input type="hidden" name="id" value="{{ row.id }}">
+            </form>
+            {% endfor %}
+        </ul>
+        {% elif table == "relative_add" %}
+        <ul>
+            {% for row in rows %}
+            <form method="post" action="/admin?table={{ table }}">
+                <li>{{ row.id }}|{{ row.user1_id }}|{{ row.user2_id }}</li>
+                <button type="submit" name="deleterow">deleterow: id={{ row.id }}</button>
+                <input type="hidden" name="table" value="{{ table }}">
+                <input type="hidden" name="id" value="{{ row.id }}">
+            </form>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% else %}
+    <h3>Tables:</h3>
+    <ul>
+        <li><a href="/admin?table=user">user</a></li>
+        <li><a href="/admin?table=post">post</a></li>
+        <li><a href="/admin?table=relatives">relatives</a></li>
+        <li><a href="/admin?table=relative_add">relative_add</a></li>
+    </ul>
+    {% endif %}
+</body>
+</html>

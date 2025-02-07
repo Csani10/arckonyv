@@ -2,6 +2,7 @@ from flask import request, redirect, url_for, render_template, Blueprint, flash
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 from .models import *
+import json
 
 auth = Blueprint("auth", __name__)
 
@@ -57,6 +58,11 @@ def register():
             new_user = User(first_name=first_name, last_name=last_name, email=email, username=username, password=generate_password_hash(password))
             db.session.add(new_user)
             db.session.commit()
+
+            new_user_relatives = Relatives(user_id=new_user.id, relatives=json.dumps({"relatives": []}))
+            db.session.add(new_user_relatives)
+            db.session.commit()
+
             flash("Sikeres regisztráció!", "success")
 
             login_user(new_user, remember=True)

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arckönyv: Admin Add</title>
+</head>
+<body>
+    <a href="/admin"><h2>Admin Home</h2></a>
+    {% if table == "user" %}
+    <form action="/admin" method="post">
+        <label for="email">Email:</label>
+        <input type="text" name="email" id="email">
+        <label for="first_name">First name:</label>
+        <input type="text" name="first_name" id="first_name">
+        <label for="last_name">Last name:</label>
+        <input type="text" name="last_name" id="last_name">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username">
+        <label for="password">Password:</label>
+        <input type="text" name="password" id="password">
+        <label for="admin">Admin:</label>
+        <input type="checkbox" name="admin" id="admin">
+        <button type="submit">Add row</button>
+    </form>
+    {% elif table == "post" %}
+    <form action="/admin" method="post">
+        <label for="data">Data:</label>
+        <textarea name="data" id="data"></textarea>
+        <label for="user_id">User id:</label>
+        <input type="text" name="user_id" id="user_id">
+        <button type="submit">Add row</button>
+    </form>
+    {% elif table == "relatives" %}
+    <form action="/admin" method="post">
+        <label for="relatives">Relatives:</label>
+        <textarea name="relatives" id="relatives"></textarea>
+        <label for="user_id">User id:</label>
+        <input type="text" name="user_id" id="user_id">
+        <button type="submit">Add row</button>
+    </form>
+    {% elif table == "relative_add" %}
+    <form action="/admin" method="post">
+        <label for="user1_id">User1 id:</label>
+        <input type="text" name="user1_id" id="user1_id">
+        <label for="user2_id">User2 id:</label>
+        <input type="text" name="user2_id" id="user2_id">
+        <button type="submit">Add row</button>
+    </form>
+    {% endif %}
+</body>
+</html>

@@ -6,21 +6,20 @@
 <h2>Főoldal</h2>
 {% endif %}
 {% if not user.is_authenticated %}
-<div class="formdiv">
+<div class="formdiv" style="border-radius: 10px; padding: 5px;">
     <a href="login"><button name="login">Bejelentkezés</button></a><br>
     <a href="register"><button name="register">Regisztráció</button></a>
 </div>
 {% else %}
 {% if posts %}
         {% for post in posts %}
-        <div style="background-color: darkblue; padding-bottom: 8px; padding-top: 8px; box-sizing: content-box;">
-            {% for user in users %}
+        <div style="background-color: darkblue; padding-bottom: 8px; padding-top: 8px; box-sizing: content-box; border-radius: 10px; margin-top: 5px; margin-bottom:5px;">
+            {% set user = users.query.get(post.user_id ) %}
                 {% if user.id == post.user_id %}
-                <h3><a href="/user?id={{ user.id }}">@{{ user.username }}</a></h3>
+                <h3 style="margin: 5px;"><a href="/user?id={{ user.id }}">@{{ user.username }}</a></h3>
                 {% endif %}
-            {% endfor %}
-            <p style="color: white;">{{ post.data }}</p>
-            <p style="color: white;">{{ post.date }}</p>
+            <p style="color: white; margin: 5px;">{{ post.data }}</p>
+            <p style="color: white; margin: 5px;">{{ post.date }}</p>
         </div>
         {% endfor %}
     {% else %}

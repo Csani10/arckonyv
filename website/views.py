@@ -1,15 +1,16 @@
 from flask import request, redirect, url_for, render_template, Blueprint, flash
 from flask_login import current_user, logout_user
 from .models import *
+import json
 
 views = Blueprint("views", __name__)
 
 @views.route("/")
 def index():
     posts = Post.query.order_by(Post.date).all()
-    users = User.query.all()
+    posts.reverse()
 
-    return render_template("index.html", user=current_user, posts=posts, users=users)
+    return render_template("index.html", user=current_user, posts=posts, users=User)
 
 @views.route("/user", methods=["GET", "POST"])
 def user():
@@ -45,11 +46,36 @@ def user():
 
             db.session.delete(post)
             db.session.commit()
-    
+        elif request.form.get("addasrelative") == "":
+            id = request.form.get("id")
+
+            relative_add = RelativeAdd(user1_id=current_user.id, user2_id=int(id))
+            db.session.add(relative_add)
+            db.session.commit()
+            return redirect(url_for("views.user") + f"?id={str(id)}")
+        elif request.form.get("acceptasrelative") == "":
+            id = request.form.get("id")
+            relative_add = RelativeAdd.query.filter_by(user1_id=int(id), user2_id=current_user.id).first()
+            db.session.delete(relative_add)
+
+            relatives1 = Relatives.query.filter_by(user_id=current_user.id).first()
+            json_text = json.loads(relatives1.relatives)
+            json_text["relatives"].append(User.query.filter_by(id=int(id)).first().username)
+            relatives1.relatives = json.dumps(json_text)
+
+            relatives2 = Relatives.query.filter_by(user_id=int(id)).first()
+            json_text = json.loads(relatives2.relatives)
+            json_text["relatives"].append(User.query.filter_by(id=int(current_user.id)).first().username)
+            relatives2.relatives = json.dumps(json_text)
+
+            db.session.commit()
+
     if not current_user.is_authenticated and not id:
         return redirect(url_for("views.index"))
 
     posts = Post.query.filter_by(user_id=user.id).all()
     posts.reverse()
 
-    return render_template("user.html", user=user, posts=posts, local_user=local_user)
+    relative_adds = RelativeAdd.query.filter_by(user2_id=current_user.id)
+
+    return render_template("user.html", user=user, posts=posts, local_user=local_user, current_user=current_user, relative_add=RelativeAdd, relatives=Relatives, json=json)
