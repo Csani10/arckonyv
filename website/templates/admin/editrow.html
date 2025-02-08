@@ -12,44 +12,45 @@
     <form method="post">
         <input type="hidden" name="id" value="{{ id }}">
         <label for="email">Email:</label>
-        <input type="text" name="email" id="email">
+        <input type="text" name="email" id="email" value="{{ user.query.get(id).email }}">
         <label for="first_name">First name:</label>
-        <input type="text" name="first_name" id="first_name">
+        <input type="text" name="first_name" id="first_name" value="{{ user.query.get(id).first_name }}">
         <label for="last_name">Last name:</label>
-        <input type="text" name="last_name" id="last_name">
+        <input type="text" name="last_name" id="last_name" value="{{ user.query.get(id).last_name }}">
         <label for="username">Username:</label>
-        <input type="text" name="username" id="username">
+        <input type="text" name="username" id="username" value="{{ user.query.get(id).username }}">
         <label for="password">Password:</label>
         <input type="text" name="password" id="password">
         <label for="admin">Admin:</label>
-        <input type="checkbox" name="admin" id="admin">
+        {#<input type="checkbox" name="admin" id="admin" value="">#}
+        <input type="checkbox" name="admin" id="admin" checked={{ user.query.get(id).admin }}>
         <button type="submit">Edit row</button>
     </form>
     {% elif table == "post" %}
     <form method="post">
         <input type="hidden" name="id" value="{{ id }}">
         <label for="data">Data:</label>
-        <textarea name="data" id="data"></textarea>
+        <textarea name="data" id="data">{{ post.query.get(id).data }}</textarea>
         <label for="user_id">User id:</label>
-        <input type="text" name="user_id" id="user_id">
+        <input type="text" name="user_id" id="user_id" value="{{ post.query.get(id).user_id }}">
         <button type="submit">Edit row</button>
     </form>
     {% elif table == "relatives" %}
     <form method="post">
         <input type="hidden" name="id" value="{{ id }}">
         <label for="relatives">Relatives:</label>
-        <textarea name="relatives" id="relatives"></textarea>
+        <textarea name="relatives" id="relatives">{{ relatives.query.get(id).relatives }}</textarea>
         <label for="user_id">User id:</label>
-        <input type="text" name="user_id" id="user_id">
+        <input type="text" name="user_id" id="user_id" value="{{ relatives.query.get(id).user_id }}">
         <button type="submit">Edit row</button>
     </form>
     {% elif table == "relative_add" %}
     <form method="post">
         <input type="hidden" name="id" value="{{ id }}">
         <label for="user1_id">User1 id:</label>
-        <input type="text" name="user1_id" id="user1_id">
+        <input type="text" name="user1_id" id="user1_id" value="{{ relative_add.query.get(id).user1_id }}">
         <label for="user2_id">User2 id:</label>
-        <input type="text" name="user2_id" id="user2_id">
+        <input type="text" name="user2_id" id="user2_id" value="{{ relative_add.query.get(id).user2_id }}">
         <button type="submit">Edit row</button>
     </form>
     {% endif %}

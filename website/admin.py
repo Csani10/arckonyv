@@ -99,7 +99,7 @@ def editrow():
             case "relative_add":
                 editrelative_add(request.form)
 
-    return render_template("/admin/editrow.html", table=table, id=int(id))
+    return render_template("/admin/editrow.html", table=table, id=int(id), post=Post, user=User, relative_add=RelativeAdd, relatives=Relatives)
 
 @admin.route("/addrow", methods=["GET", "POST"])
 def addrow():
