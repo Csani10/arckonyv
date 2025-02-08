@@ -74,6 +74,23 @@ def editrelative_add(form):
     
     db.session.commit()
 
+def editmessage(form):
+    id = form.get("id")
+    user1_id = request.form.get("user1_id")
+    user2_id = request.form.get("user2_id")
+    data = request.form.get("data")
+
+    message = Message.query.get(int(id))
+
+    if user1_id:
+        message.user1_id = int(user1_id)
+    if user2_id:
+        message.user2_id = int(user2_id)
+    if data:
+        message.data = data
+    
+    db.session.commit()
+
 @admin.route("/editrow", methods=["GET", "POST"])
 def editrow():
     if not current_user.admin or not current_user.is_authenticated:
@@ -98,8 +115,10 @@ def editrow():
                 editrelatives(request.form)
             case "relative_add":
                 editrelative_add(request.form)
+            case "message":
+                editmessage(request.form)
 
-    return render_template("/admin/editrow.html", table=table, id=int(id), post=Post, user=User, relative_add=RelativeAdd, relatives=Relatives)
+    return render_template("/admin/editrow.html", table=table, id=int(id), post=Post, user=User, relative_add=RelativeAdd, relatives=Relatives, message=Message)
 
 @admin.route("/addrow", methods=["GET", "POST"])
 def addrow():
@@ -141,6 +160,10 @@ def addrow():
                 newrow = RelativeAdd(user1_id=int(user1_id), user2_id=int(user2_id))
                 db.session.add(newrow)
                 db.session.commit()
+            case "message":
+                newrow = Message(user1_id=int(user1_id), user2_id=int(user2_id), data=data)
+                db.session.add(newrow)
+                db.session.commit()
 
     return render_template("admin/addrow.html", table=table)
 
@@ -172,6 +195,10 @@ def index():
                     db.session.commit()
                 case "relative_add":
                     row = RelativeAdd.query.get(int(id))
+                    db.session.delete(row)
+                    db.session.commit()
+                case "message":
+                    row = Message.query.get(int(id))
                     db.session.delete(row)
                     db.session.commit()
 

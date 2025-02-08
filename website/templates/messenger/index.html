@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if users %}
+{% for user in users.keys() %}
+<h3><a href="/messenger/?other_user_id={{ users[user] }}">{{ user }}</a></h3>
+{% endfor %}
+{% else %}
+Csóró kutya, nincsenek ismerőseid! >:)
+{% endif %}
+
+{% endblock %}

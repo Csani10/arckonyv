@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="chat-container">
+    <ul id="messages-list">
+        <!-- Messages will be appended here -->
+    </ul>
+    <textarea name="data" id="data"></textarea>
+    <button onclick="sendMessage()">Küldés</button>
+    <button onclick="fetchMessages()">Frissítés</button>
+</div>
+
+<script>
+    let isFetching = false;  // Flag to prevent overlapping fetch requests
+
+    // Function to send a message
+    function sendMessage() {
+        console.log("Sending message...");
+        
+        const user1 = {{ current_user.id }};
+        var user2 = {{ other_user_id }};
+        const data = document.getElementById("data").value;
+
+        if (data !== "") {
+            const url = '/messenger/api/sendmessage';  // The endpoint for sending messages
+            const messageData = {
+                user1_id: user1,
+                user2_id: user2,
+                data: data
+            };
+
+            // Send a POST request with message data
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',  // Indicate JSON body
+                },
+                body: JSON.stringify(messageData)  // Convert data to JSON
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Message sent successfully:', data);
+                // Clear the textarea after sending the message
+                document.getElementById("data").value = '';
+                // Fetch messages again to update the chat
+                fetchMessages();
+            })
+            .catch(error => {
+                console.error('Error sending message:', error);
+            });
+        }
+    }
+
+    // Function to fetch messages
+    function fetchMessages() {
+        if (isFetching) return;  // Prevent overlapping fetch requests
+        isFetching = true;  // Set the flag to true
+
+        const user1 = {{ current_user.id }};
+        const user2 = {{ other_user_id }};
+        const url = `/messenger/api/getmessages?user1=${user1}&user2=${user2}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const messagesList = document.getElementById("messages-list");
+                messagesList.innerHTML = '';  // Clear current messages
+
+                if (data.messages && data.messages.length > 0) {
+                    // Loop through the messages and append them to the list
+                    data.messages.forEach(message => {
+                        const li = document.createElement("li");
+                        li.innerHTML = `
+                            <strong>User ${message.user1}:</strong> ${message.data}
+                            <small>(${message.date})</small>
+                        `;
+                        messagesList.appendChild(li);
+                    });
+                } else {
+                    // Display a message if there are no messages
+                    const li = document.createElement("li");
+                    li.textContent = "Köszönj a másiknak egy Hellóval!";
+                    messagesList.appendChild(li);
+                }
+            })
+            .catch(err => {
+                console.error('Error fetching messages:', err);
+            })
+            .finally(() => {
+                isFetching = false;  // Reset flag after fetch is complete
+            });
+    }
+
+    // Fetch messages when the page loads
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initial fetch when the page loads
+        fetchMessages();
+
+        // Set an interval to fetch messages every 5 seconds (5000 milliseconds)
+        setInterval(fetchMessages, 5000);
+    });
+</script>
+
+{% endblock %}

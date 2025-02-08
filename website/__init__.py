@@ -15,12 +15,14 @@ def create_app():
     from .views import views
     from .auth import auth
     from .admin import admin
+    from .messenger import messenger
 
     app.register_blueprint(views, url_prefix="/")
     app.register_blueprint(auth, url_prefix="/")
     app.register_blueprint(admin, url_prefix="/admin")
+    app.register_blueprint(messenger, url_prefix="/messenger")
 
-    from .models import User, Post, Relatives, RelativeAdd
+    from .models import User, Post, Relatives, RelativeAdd, Message
 
     create_database(app)
 

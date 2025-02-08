@@ -58,6 +58,18 @@
             <a href="/admin/editrow?table={{ table }}&id={{ row.id }}"><button>editrow: id={{ row.id }}</button></a>
             {% endfor %}
         </ul>
+        {% elif table == "message" %}
+        <ul>
+            {% for row in rows %}
+            <form method="post" action="/admin?table={{ table }}">
+                <li>{{ row.id }}|{{ row.user1_id }}|{{ row.user2_id }}|{{ row.data }}</li>
+                <button type="submit" name="deleterow">deleterow: id={{ row.id }}</button>
+                <input type="hidden" name="table" value="{{ table }}">
+                <input type="hidden" name="id" value="{{ row.id }}">
+            </form>
+            <a href="/admin/editrow?table={{ table }}&id={{ row.id }}"><button>editrow: id={{ row.id }}</button></a>
+            {% endfor %}
+        </ul>
         {% endif %}
     {% else %}
     <h3>Tables:</h3>
@@ -66,6 +78,7 @@
         <li><a href="/admin?table=post">post</a></li>
         <li><a href="/admin?table=relatives">relatives</a></li>
         <li><a href="/admin?table=relative_add">relative_add</a></li>
+        <li><a href="/admin?table=message">message</a></li>
     </ul>
     {% endif %}
 </body>

@@ -2,6 +2,13 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user1_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user2_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    data = db.Column(db.String(10000))
+    date = db.Column(db.DateTime(timezone=True), default=func.now())
+
 class RelativeAdd(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user1_id = db.Column(db.Integer, db.ForeignKey("user.id"))

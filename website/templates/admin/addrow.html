@@ -47,6 +47,16 @@
         <input type="text" name="user2_id" id="user2_id">
         <button type="submit">Add row</button>
     </form>
+    {% elif table == "message" %}
+    <form method="post">
+        <label for="user1_id">User1 id:</label>
+        <input type="text" name="user1_id" id="user1_id">
+        <label for="user2_id">User2 id:</label>
+        <input type="text" name="user2_id" id="user2_id">
+        <label for="data">Data:</label>
+        <textarea name="data" id="data"></textarea>
+        <button type="submit">Add row</button>
+    </form>
     {% endif %}
 </body>
 </html>
